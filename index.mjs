@@ -1,10 +1,10 @@
-const { program } = require('commander');
-const {
+import { program } from 'commander';
+import {
     listContacts,
     getContactById,
     removeContact,
-    addContact
-} = require('./contacts');
+    addContact,
+} from './contacts.mjs';
 
 program
     .option('-a, --action <type>', 'action to perform')
@@ -13,7 +13,7 @@ program
     .option('-e, --email <type>', 'contact email')
     .option('-p, --phone <type>', 'contact phone');
 
-program.parse(process.argv);
+program.parse();
 
 const argv = program.opts();
 
@@ -26,21 +26,21 @@ async function invokeAction({ action, id, name, email, phone }) {
 
         case 'get':
             const contact = await getContactById(id);
-            console.log(contact || 'Contact not found');
+            console.log(contact);
             break;
 
         case 'add':
             const newContact = await addContact(name, email, phone);
-            console.log('Contact added:', newContact);
+            console.log(newContact);
             break;
 
         case 'remove':
             const removed = await removeContact(id);
-            console.log(removed || 'Contact not found');
+            console.log(removed);
             break;
 
         default:
-            console.warn('Unknown action type!');
+            console.warn('\x1b[31m Unknown action type!\x1b[0m');
     }
 }
 
